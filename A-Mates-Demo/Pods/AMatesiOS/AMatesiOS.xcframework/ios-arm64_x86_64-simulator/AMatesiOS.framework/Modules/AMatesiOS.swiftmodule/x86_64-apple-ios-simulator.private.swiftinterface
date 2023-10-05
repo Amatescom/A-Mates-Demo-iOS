@@ -1,0 +1,591 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.8 (swiftlang-5.8.0.124.2 clang-1403.0.22.11.100)
+// swift-module-flags: -target x86_64-apple-ios13.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name AMatesiOS
+// swift-module-flags-ignorable: -enable-bare-slash-regex
+import AVFoundation
+import Alamofire
+import Combine
+import CoreData
+import Foundation
+import Kingfisher
+import MobileCoreServices
+import Moya
+import Network
+import PhotosUI
+import SafariServices
+import Security
+import Swift
+import SwiftUI
+import UIKit
+import UserNotifications
+import _Concurrency
+import _StringProcessing
+@objc @_hasMissingDesignatedInitializers final public class AMates : ObjectiveC.NSObject {
+  public static func setup(with config: AMatesiOS.AMatesConfig)
+  public static func updatePushConfigs(with token: Swift.String)
+  public static func show()
+  public static func dismiss()
+  public static func checkPush(notification: UserNotifications.UNNotification) -> Swift.Bool
+  public static func showPush(notification: UserNotifications.UNNotification) -> Swift.Bool
+  public static func didReceive(response: UserNotifications.UNNotificationResponse)
+  public static func handleLink(url: Foundation.URL)
+  @objc deinit
+}
+extension AMatesiOS.AMates {
+  public static func validateConfigs() throws
+}
+public struct AMatesConfig {
+  public let profileConfig: (any AMatesiOS.AMatesProfileConfig)?
+  public let appConfig: AMatesiOS.AMatesAppConfig
+  public let interfaceConfig: AMatesiOS.AMatesUIInterfaceConfig
+  public var baseURL: AMatesiOS.AMatesBaseURL
+  public var pushConfig: AMatesiOS.AMatesPushConfig?
+  public init(appConfig: AMatesiOS.AMatesAppConfig, interfaceConfig: AMatesiOS.AMatesUIInterfaceConfig = AMatesUIInterfaceConfig(), profileConfig: (any AMatesiOS.AMatesProfileConfig)? = nil, pushConfig: AMatesiOS.AMatesPushConfig? = nil)
+}
+public struct AMatesAppConfig : Swift.Equatable {
+  public let appId: Swift.String
+  public let language: AMatesiOS.AmatesLanguages
+  public init(appId: Swift.String, language: AMatesiOS.AmatesLanguages = .currentLocale)
+  public static func == (a: AMatesiOS.AMatesAppConfig, b: AMatesiOS.AMatesAppConfig) -> Swift.Bool
+}
+public struct AMatesUIInterfaceConfig {
+  public let interfaceStyle: UIKit.UIUserInterfaceStyle?
+  public let colors: AMatesiOS.AMatesConfigColors
+  public init(interfaceStyle: UIKit.UIUserInterfaceStyle = .unspecified, colors: AMatesiOS.AMatesConfigColors? = nil)
+}
+public struct AMatesConfigColors {
+  public let primaryColor: UIKit.UIColor
+  public let backgroundColor: UIKit.UIColor
+  public let backgroundVariantColor: UIKit.UIColor
+  public let textColor: UIKit.UIColor
+  public let textVariantColor: UIKit.UIColor
+  public let textExtraVariantColor: UIKit.UIColor
+  public let textHintColor: UIKit.UIColor
+  public let bubleColor: UIKit.UIColor
+  public let dividerColor: UIKit.UIColor
+  public let onPrimaryColor: UIKit.UIColor
+  public let onPrimaryVariantColor: UIKit.UIColor
+  public let buttonDisabled: UIKit.UIColor
+  public let warningColor: UIKit.UIColor
+  public init(primaryColor: UIKit.UIColor = AMatesColors.primary.color, backgroundColor: UIKit.UIColor = AMatesColors.background.color, backgroundVariantColor: UIKit.UIColor = AMatesColors.backgroundVariant.color, textColor: UIKit.UIColor = AMatesColors.text.color, textVariantColor: UIKit.UIColor = AMatesColors.textVariant.color, textExtraVariantColor: UIKit.UIColor = AMatesColors.textExtraVariant.color, textHintColor: UIKit.UIColor = AMatesColors.textHint.color, bubleColor: UIKit.UIColor = AMatesColors.buble.color, dividerColor: UIKit.UIColor = AMatesColors.divider.color, onPrimaryColor: UIKit.UIColor = AMatesColors.onPrimary.color, onPrimaryVariantColor: UIKit.UIColor = AMatesColors.onPrimaryVariant.color, buttonDisabled: UIKit.UIColor = AMatesColors.buttonDisabled.color, warningColor: UIKit.UIColor = AMatesColors.warning.color)
+}
+public struct AMatesPushConfig : Swift.Equatable {
+  public let pushTokenString: Swift.String
+  public init(pushTokenString: Swift.String)
+  public static func == (a: AMatesiOS.AMatesPushConfig, b: AMatesiOS.AMatesPushConfig) -> Swift.Bool
+}
+public struct AMatesBaseURL : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public init?(urlString: Swift.String)
+  public init(url: Foundation.URL)
+}
+public enum AMatesError : Swift.Error {
+  case configError(Swift.String)
+}
+public protocol AMatesProfileConfig {
+  init(userId: Swift.Int?, userName: Swift.String?)
+  var userId: Swift.Int? { get set }
+  var userName: Swift.String? { get set }
+  func onUserIdReceived(_ id: Swift.Int)
+}
+@objc @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class DefaultThemeProvider : ObjectiveC.NSObject {
+  @objc deinit
+}
+public enum AmatesLanguages : Swift.String, Swift.RawRepresentable {
+  case en
+  case ru
+  case currentLocale
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum AMatesColors : Swift.String {
+  case primary
+  case background
+  case backgroundVariant
+  case text
+  case textVariant
+  case textExtraVariant
+  case textHint
+  case buble
+  case divider
+  case onPrimary
+  case onPrimaryVariant
+  case buttonDisabled
+  case warning
+  case darkGradientStart
+  case darkGradientEnd
+  case whiteGradientStart
+  case whiteGradientEnd
+  public var color: UIKit.UIColor {
+    get
+  }
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+@_inheritsConvenienceInitializers @objc(Message) public class Message : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+extension AMatesiOS.Message {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<AMatesiOS.Message>
+  @objc @NSManaged dynamic public var authorId: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var chatId: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var createdAt: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var id: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isDeletedMessage: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isEdit: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isLiked: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isReported: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var likesCount: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var mimeType: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var prevId: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var repliesCount: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var type: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var updatedAt: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var version: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var content: AMatesiOS.MessageContent? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var replies: Foundation.NSSet? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var topic: AMatesiOS.Topic? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var user: AMatesiOS.User? {
+    @objc get
+    @objc set
+  }
+}
+extension AMatesiOS.Message {
+  @objc(addRepliesObject:) @NSManaged dynamic public func addToReplies(_ value: AMatesiOS.Reply)
+  @objc(removeRepliesObject:) @NSManaged dynamic public func removeFromReplies(_ value: AMatesiOS.Reply)
+  @objc(addReplies:) @NSManaged dynamic public func addToReplies(_ values: Foundation.NSSet)
+  @objc(removeReplies:) @NSManaged dynamic public func removeFromReplies(_ values: Foundation.NSSet)
+}
+extension AMatesiOS.Message : Swift.Identifiable {
+  public typealias ID = Swift.Int32
+}
+@_inheritsConvenienceInitializers @objc(MessageContent) public class MessageContent : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+extension AMatesiOS.MessageContent {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<AMatesiOS.MessageContent>
+  @objc @NSManaged dynamic public var previewUrl: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var text: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var url: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var message: AMatesiOS.Message? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var reply: AMatesiOS.Reply? {
+    @objc get
+    @objc set
+  }
+}
+extension AMatesiOS.MessageContent : Swift.Identifiable {
+  public typealias ID = Swift.ObjectIdentifier
+}
+@_inheritsConvenienceInitializers @objc(Metric) public class Metric : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+extension AMatesiOS.Metric {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<AMatesiOS.Metric>
+  @objc @NSManaged dynamic public var action: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var createdAt: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var filter: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var finish: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var idMetricEvent: Foundation.NSNumber? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var key: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var language: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var place: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var start: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var status: Foundation.NSNumber? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var type: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var version: Swift.String? {
+    @objc get
+    @objc set
+  }
+}
+extension AMatesiOS.Metric : Swift.Identifiable {
+  public typealias ID = Swift.ObjectIdentifier
+}
+@_inheritsConvenienceInitializers @objc(Reply) public class Reply : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+extension AMatesiOS.Reply {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<AMatesiOS.Reply>
+  @objc @NSManaged dynamic public var authorId: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var authorName: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var avatarUrl: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var chatId: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var createdAt: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var id: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isDeletedReply: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isEdit: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isReported: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var messageId: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var mimeType: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var prevId: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var type: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var updatedAt: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var version: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var message: AMatesiOS.Message? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var replyContent: AMatesiOS.MessageContent? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var user: AMatesiOS.User? {
+    @objc get
+    @objc set
+  }
+}
+extension AMatesiOS.Reply : Swift.Identifiable {
+  public typealias ID = Swift.Int32
+}
+@_inheritsConvenienceInitializers @objc(Topic) public class Topic : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+extension AMatesiOS.Topic {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<AMatesiOS.Topic>
+  @objc @NSManaged dynamic public var authorId: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var authorName: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var avatarUrl: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var contentUpdatedAt: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var createdAt: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var descriptionTopic: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var id: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isDeletedTopic: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var joined: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var messageCount: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var muted: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var pinned: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var reported: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var selectedFilter: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var title: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var updatedAt: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var messages: Foundation.NSSet? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var topicHolder: AMatesiOS.User? {
+    @objc get
+    @objc set
+  }
+}
+extension AMatesiOS.Topic {
+  @objc(addMessagesObject:) @NSManaged dynamic public func addToMessages(_ value: AMatesiOS.Message)
+  @objc(removeMessagesObject:) @NSManaged dynamic public func removeFromMessages(_ value: AMatesiOS.Message)
+  @objc(addMessages:) @NSManaged dynamic public func addToMessages(_ values: Foundation.NSSet)
+  @objc(removeMessages:) @NSManaged dynamic public func removeFromMessages(_ values: Foundation.NSSet)
+}
+extension AMatesiOS.Topic : Swift.Identifiable {
+  public typealias ID = Swift.Int32
+}
+@_inheritsConvenienceInitializers @objc(User) public class User : CoreData.NSManagedObject {
+  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
+}
+extension AMatesiOS.User {
+  @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<AMatesiOS.User>
+  @objc @NSManaged dynamic public var avatar: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var avatarId: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var banned: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var createdAt: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var deviceId: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var displayName: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var email: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var firstName: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var id: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isReported: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var lastName: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var phone: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var role: Swift.Int32 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var secondPhone: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var uid: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var updatedAt: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var message: Foundation.NSSet? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var reply: Foundation.NSSet? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var topics: Foundation.NSSet? {
+    @objc get
+    @objc set
+  }
+}
+extension AMatesiOS.User {
+  @objc(addMessageObject:) @NSManaged dynamic public func addToMessage(_ value: AMatesiOS.Message)
+  @objc(removeMessageObject:) @NSManaged dynamic public func removeFromMessage(_ value: AMatesiOS.Message)
+  @objc(addMessage:) @NSManaged dynamic public func addToMessage(_ values: Foundation.NSSet)
+  @objc(removeMessage:) @NSManaged dynamic public func removeFromMessage(_ values: Foundation.NSSet)
+}
+extension AMatesiOS.User {
+  @objc(addReplyObject:) @NSManaged dynamic public func addToReply(_ value: AMatesiOS.Reply)
+  @objc(removeReplyObject:) @NSManaged dynamic public func removeFromReply(_ value: AMatesiOS.Reply)
+  @objc(addReply:) @NSManaged dynamic public func addToReply(_ values: Foundation.NSSet)
+  @objc(removeReply:) @NSManaged dynamic public func removeFromReply(_ values: Foundation.NSSet)
+}
+extension AMatesiOS.User {
+  @objc(addTopicsObject:) @NSManaged dynamic public func addToTopics(_ value: AMatesiOS.Topic)
+  @objc(removeTopicsObject:) @NSManaged dynamic public func removeFromTopics(_ value: AMatesiOS.Topic)
+  @objc(addTopics:) @NSManaged dynamic public func addToTopics(_ values: Foundation.NSSet)
+  @objc(removeTopics:) @NSManaged dynamic public func removeFromTopics(_ values: Foundation.NSSet)
+}
+extension AMatesiOS.User : Swift.Identifiable {
+  public typealias ID = Swift.Int32
+}
+extension AMatesiOS.AmatesLanguages : Swift.Equatable {}
+extension AMatesiOS.AmatesLanguages : Swift.Hashable {}
+extension AMatesiOS.AMatesColors : Swift.Equatable {}
+extension AMatesiOS.AMatesColors : Swift.Hashable {}
+extension AMatesiOS.AMatesColors : Swift.RawRepresentable {}

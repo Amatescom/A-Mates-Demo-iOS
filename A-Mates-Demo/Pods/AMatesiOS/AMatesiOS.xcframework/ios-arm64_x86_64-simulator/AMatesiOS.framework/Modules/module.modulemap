@@ -1,0 +1,4 @@
+framework module AMatesiOS {
+  header "AMatesiOS-Swift.h"
+  requires objc
+}
